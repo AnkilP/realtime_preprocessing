@@ -1,0 +1,8 @@
+prefix=/home/ankilp/image_processing/install
+
+Name: polled_camera
+Description: Description of polled_camera
+Version: 1.11.13
+Cflags: -I/home/ankilp/image_processing/install/include
+Libs: -L/home/ankilp/image_processing/install/lib -lpolled_camera
+Requires: image_transport message_runtime roscpp sensor_msgs std_msgs

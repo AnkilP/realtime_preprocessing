@@ -1,0 +1,8 @@
+prefix=/home/ankilp/image_processing/devel
+
+Name: preprocessing_pkg
+Description: Description of preprocessing_pkg
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ankilp/image_processing/devel/lib -lpreprocessing_pkg
+Requires: cv_bridge image_transport opencv roscpp sensor_msgs std_msgs

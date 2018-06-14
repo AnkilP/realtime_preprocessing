@@ -1,0 +1,8 @@
+prefix=/home/ankilp/image_processing/devel
+
+Name: sensor_msgs
+Description: Description of sensor_msgs
+Version: 1.12.6
+Cflags: -I/home/ankilp/image_processing/devel/include -I/home/ankilp/image_processing/src/common_msgs/sensor_msgs/include
+Libs: -L/home/ankilp/image_processing/devel/lib 
+Requires: geometry_msgs message_runtime std_msgs

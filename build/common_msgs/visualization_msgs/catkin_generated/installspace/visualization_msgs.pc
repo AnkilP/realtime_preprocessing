@@ -1,0 +1,8 @@
+prefix=/home/ankilp/image_processing/install
+
+Name: visualization_msgs
+Description: Description of visualization_msgs
+Version: 1.12.6
+Cflags: -I/home/ankilp/image_processing/install/include
+Libs: -L/home/ankilp/image_processing/install/lib 
+Requires: geometry_msgs message_runtime std_msgs
