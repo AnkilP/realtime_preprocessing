@@ -19,6 +19,9 @@ class ImageConverter
   cv::Mat img;
   cv::Mat cpy;
 
+  int screen_size_x;
+  int screen_size_y;
+
 public:
   ImageConverter()
     : it_(nh_)
@@ -42,6 +45,7 @@ public:
   void lut_builder(float fGamma);
   float rgb2luma(float r, float g, float b);
   void bilateral_filter(const cv::Mat & src, cv::Mat dst);
+  void anti_aliasing(const cv::Mat & src, cv::Mat dst);
 };
 
 void ImageConverter::lut_builder(float fGamma){

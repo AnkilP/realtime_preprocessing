@@ -64,8 +64,17 @@ float ImageConverter::rgb2luma(float r, float g, float b){
     return sqrt(r*0.299 + 0.587*g + 0.114*b);
 }
 
-void ImageConverter::bilateral_filter(const cv::Mat & src, cv::Mat dst){
-    
+void ImageConverter::bilateral_filter(const cv::Mat & src, cv::Mat & dst){
+	bilateralFilter(&src, &dst, 1, 2, 0.5);
+}
+
+void edge_detector(const cv::Mat & src) {
+
+}
+
+
+void ImageConverter::anti_aliasing(const cv::Mat & src, cv::Mat dst) {
+	//combine all previous operations
 }
 
 //awb gain control
