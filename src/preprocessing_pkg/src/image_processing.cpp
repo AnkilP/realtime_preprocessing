@@ -59,7 +59,7 @@ void lens_shading_correction(){
     
 }
 
-//anti-aliasing noise filter: http://blog.simonrodriguez.fr/articles/30-07-2016_implementing_fxaa.html
+//anti-aliasing filter - MLAA: http://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
 float ImageConverter::rgb2luma(float r, float g, float b){
     return sqrt(r*0.299 + 0.587*g + 0.114*b);
 }
@@ -68,7 +68,18 @@ void ImageConverter::bilateral_filter(const cv::Mat & src, cv::Mat & dst){
 	bilateralFilter(&src, &dst, 1, 2, 0.5);
 }
 
-void edge_detector(const cv::Mat & src) {
+void edge_detector(const cv::Mat & src, cv::Mat & dst) {
+	cv::Canny(&src, &dst, lowThreshold, lowThreshold * ratio, kernel_size);
+}
+
+//MLAA
+
+/*
+1.Find discontinuities between pixels in a given image.
+2.Identify U-shaped, Z-shaped, L-shaped patterns.
+3.Blend colors in the neighborhood of these patterns.
+*/
+void cv::first_step(const cv::Mat & src) {
 
 }
 

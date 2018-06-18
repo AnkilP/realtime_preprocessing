@@ -19,8 +19,8 @@ class ImageConverter
   cv::Mat img;
   cv::Mat cpy;
 
-  int screen_size_x;
-  int screen_size_y;
+  int lowThreshold = 1;
+  int ratio = 3;
 
 public:
   ImageConverter()
@@ -55,7 +55,7 @@ void ImageConverter::lut_builder(float fGamma){
 	}
 }
 
-// don't forget to include related head files - not sure if want to go the opengl route
+// don't forget to include related head files - not sure if the opengl route might be easier given this problem's ubiquity in this space
 //https://gist.github.com/zhangzhensong/03f67947c22acb5ee922
 void BindCVMat2GLTexture(cv::Mat& image, GLuint& imageTexture)
 {
