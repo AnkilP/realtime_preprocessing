@@ -46,6 +46,11 @@ public:
   float rgb2luma(float r, float g, float b);
   void bilateral_filter(const cv::Mat & src, cv::Mat dst);
   void anti_aliasing(const cv::Mat & src, cv::Mat dst);
+    
+  void histogram_equalization(const cv::Mat & src, cv::Mat & image_clahe, const int clip);
+  void chroma_noise_filter(const cv::Mat & src, cv::Mat & dst);
+  void hue_saturation_control(const cv::Mat & src, cv::Mat & dst);
+  void automatic_white_balance_gain_control(const cv::Mat & src, cv::Mat & dst);
 };
 
 void ImageConverter::lut_builder(float fGamma){

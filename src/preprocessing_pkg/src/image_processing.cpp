@@ -58,7 +58,7 @@ void ImageConverter::GammaCorrection(const Mat& src, Mat& dst, float fGamma){
 void lens_shading_correction(){
     
 }
-
+////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //anti-aliasing filter - MLAA: http://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/readings/reshetov09_mlaa.pdf
 float ImageConverter::rgb2luma(float r, float g, float b){
     return sqrt(r*0.299 + 0.587*g + 0.114*b);
@@ -73,7 +73,6 @@ void edge_detector(const cv::Mat & src, cv::Mat & dst) {
 }
 
 //MLAA
-
 /*
 1.Find discontinuities between pixels in a given image.
 2.Identify U-shaped, Z-shaped, L-shaped patterns.
@@ -83,14 +82,52 @@ void cv::first_step(const cv::Mat & src) {
 
 }
 
-
 void ImageConverter::anti_aliasing(const cv::Mat & src, cv::Mat dst) {
 	//combine all previous operations
 }
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\////////////////////////////////////////////////
 
-//awb gain control
+void ImageConverter::histogram_equalization(const cv::Mat & src, cv::Mat & image_clahe, const int clip){
+	//converting image to LAB space
+	cv::Mat lab_image;//(src.rows, src.cols, original_image.type());
+	cv::cvtColor(src, yuv_image, CV_BGR2Lab);
+	//extract L channel
+	std::vector<cv::Mat> lab_planes(3);
+	cv::split(lab_image, lab_planes);  // now we have the L image in lab_planes[0]
+	//applying CLAHE on L channel
+	cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE();
+	clahe->setClipLimit(4);
+	cv::Mat dst;
+	clahe->apply(lab_planes[0], dst);
+	// Merge the the color planes back into an Lab image
+	dst.copyTo(lab_planes[0]);
+	cv::merge(lab_planes, lab_image);
+	// convert back to RGB
+	cv::cvtColor(lab_image, image_clahe, CV_Lab2BGR);
+}
+
+//awb gain control // after gamma correction
+/*
+https://pdfs.semanticscholar.org/a681/674e7657a5b7f02ac78cd274d0d1a54072b6.pdf
+*/
+void ImageConverter::automatic_white_balance_gain_control(const cv::Mat & src, cv::Mat & dst) {
+
+}
 
 //cfa interpolation
+/*
+Image sensors have pixels that are dedicated to a single colour and thus each pixel must be interpolated
+Only use this if you have access to the GPU!!
+*/
+void ImageConverter::demosaicing(const cv::Mat & src, cv::Mat & dst) {
+	//TODO: add check for nvcc
+	try {
+		cv::cuda::demosaicing(src, dst, COLOR_BayerBG2BGR_MHT, 3);
+	}
+	catch (const cv::Exception& ex) {
+		std::_Count_pr << "Error: " << ex.what() << std::endl;
+	}
+}
 
 //black level correction
 void ImageConverter::black_level_correction(const cv::Mat & src, cv::Mat & dst, const double & contrast, const int & brightness){
@@ -105,23 +142,46 @@ void ImageConverter::black_level_correction(const cv::Mat & src, cv::Mat & dst, 
     }
 }
 //color correction
+/*
+RGB_out = (alpha * A I_w * RGB_in)^gamma
+where alpha, I_W and A, respectively represent the exposure compensation
+gain, the diagonal matrix for the illuminant compensation
+and the color matrix transformation
+*/
+void ImageConverter::color_correction(const cv::Mat & src, cv::Mat & dst) {
+
+}
 
 //color space conversion
-
+/*
+Moving to another color space (with luminance) will allow me to use more
+conventional grayscale algorithms for image processing while still being able to move back to the 
+BGR space easily
+*/
+void ImageConverter::color_space_conversion(const cv::Mat & src, cv::Mat & ds, std::string & conversion) {
+	cv::cvtColor(src, dst, conversion);
+}
 //noise filter for chroma
+void ImageConverter::chroma_noise_filter(const cv::Mat & src, cv::Mat & dst) {
+	cv::fastNlMeansDenoisingColored(src, dst, 3, 3, 7, 21);
+}
 
 //hue saturation control
+void ImageConverter::hue_saturation_control(const cv::Mat & src, cv::Mat dst) {
+	
+}
 
 //noise filter for luma
 
 //edge enhancement
+void ImageConverter::edge_enhancement(const cv::Mat & src, cv::Mat dst) {
+	kernel = ;
+	cv::filted2D(src, dst, -1, kernel, cv::Point(-1, -1), 0, BORDER_DEFAULT);
+}
 
 //contrast brightness control
 
 //data formatter
-
-
-
 
 void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
 {
@@ -147,8 +207,7 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
   black_level_correction(&cpy, &alpha, &beta);
 
   //lens shading correction
-
-
+  
   //anti-aliasing noise noise filter
 
   //awb gain control
