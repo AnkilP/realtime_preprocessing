@@ -33,7 +33,9 @@ public:
 
     //cv::namedWindow(OPENCV_WINDOW);
   }
-
+  ImageConverter() :{
+	  std::cout << "Not using ros" << std::endl;
+  }
   ~ImageConverter()
   {
     std::cout << "/* Destroyed ImageConverter */" << '\n';

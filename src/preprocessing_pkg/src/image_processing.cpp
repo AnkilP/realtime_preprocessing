@@ -118,6 +118,7 @@ void ImageConverter::automatic_white_balance_gain_control(const cv::Mat & src, c
 /*
 Image sensors have pixels that are dedicated to a single colour and thus each pixel must be interpolated
 Only use this if you have access to the GPU!!
+This is not really useful for us since the camera handles this anyway
 */
 void ImageConverter::demosaicing(const cv::Mat & src, cv::Mat & dst) {
 	//TODO: add check for nvcc
@@ -158,12 +159,33 @@ Moving to another color space (with luminance) will allow me to use more
 conventional grayscale algorithms for image processing while still being able to move back to the 
 BGR space easily
 */
-void ImageConverter::color_space_conversion(const cv::Mat & src, cv::Mat & ds, std::string & conversion) {
-	cv::cvtColor(src, dst, conversion);
+void ImageConverter::color_space_conversion_out_of_BGR(const cv::Mat & src, cv::Mat & dst) {
+	//can run into issues where the input file is not BGR but that should be apparent from
+	//compilation
+	try {
+		cv::cvtColor(src, dst, cv::COLOR_BGR2Lab);
+	}
+	catch (cv::Exception & e) {
+		std::cout << e.what() << std::endl;
+	}
+	
+}
+
+void ImageConverter::color_space_conversion_into_BGR(const cv::Mat & src, cv::Mat & dst) {
+	//can run into issues where the input file is not Lab but that should be apparent from
+	//compilation
+	try {
+		cv::cvtColor(src, dst, cv::COLOR_Lab2BGR);
+	}
+	catch (cv::Exception & e) {
+		std::cout << e.what() << std::endl;
+	}
+
 }
 //noise filter for chroma
 void ImageConverter::chroma_noise_filter(const cv::Mat & src, cv::Mat & dst) {
-	cv::fastNlMeansDenoisingColored(src, dst, 3, 3, 7, 21);
+	//cv::fastNlMeansDenoisingColored(src, dst, 3, 3, 7, 21);
+
 }
 
 //hue saturation control
