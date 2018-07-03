@@ -55,7 +55,7 @@ void ImageConverter::GammaCorrection(const Mat& src, Mat& dst, float fGamma){
 }
 
 //lens shading correction:  
-void lens_shading_correction(){
+void ImageConverter::lens_shading_correction(){
     
 }
 ////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
